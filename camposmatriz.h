@@ -19,7 +19,7 @@ public:
         }
         return *this;
     }
-    
+    virtual MatrizBase<T>* sumar(const MatrizBase<T>& otra) const = 0;
     virtual void cargarValores() = 0;
     virtual void imprimir() const = 0;
     virtual T* operator[](int fila) = 0;
@@ -107,8 +107,6 @@ public:
     MatrizDinamica<T> operator*(const MatrizDinamica<T>& otra) const {
         if (this->_columnas != otra._filas) {
             std::cout << "Error: Para multiplicar AxB, las columnas de A deben ser iguales a las filas de B." << std::endl;
-            std::cout << "Dimensiones: [" << this->_filas << "x" << this->_columnas << "] * [" 
-                      << otra._filas << "x" << otra._columnas << "]" << std::endl;
             return MatrizDinamica<T>(this->_filas, otra._columnas);
         }
         
@@ -123,16 +121,11 @@ public:
         }
         return resultado;
     }
-    MatrizDinamica<T>* sumar(const MatrizBase<T>& otra) {
-        if (this->_filas != otra.getFilas() || this->_columnas != otra.getColumnas()) {
-            std::cout << "Error: Las matrices deben tener las mismas dimensiones para sumar." << std::endl;
-            return nullptr;
-        }
-        
+    MatrizBase<T>* sumar(const MatrizBase<T>& otra) const override {
         MatrizDinamica<T>* resultado = new MatrizDinamica<T>(this->_filas, this->_columnas);
         for (int i = 0; i < this->_filas; ++i) {
             for (int j = 0; j < this->_columnas; ++j) {
-                (*resultado)[i][j] = _datos[i][j] + otra[i][j];
+                (*resultado)[i][j] = (*this)[i][j] + otra[i][j];
             }
         }
         return resultado;
@@ -246,13 +239,12 @@ public:
         }
     }
 
-    MatrizBase<T>* sumar(const MatrizBase<T>& otra) {
+    MatrizBase<T>* sumar(const MatrizBase<T>& otra) const override {
         if (this->_filas != otra.getFilas() || this->_columnas != otra.getColumnas()) {
             std::cout << "Error: Las matrices deben tener las mismas dimensiones para sumar." << std::endl;
             return nullptr;
         }
-        
-        MatrizEstatica<T, M, N>* resultado = new MatrizEstatica<T, M, N>();
+        MatrizEstatica<T,M,N>* resultado = new MatrizEstatica<T,M,N>();
         for (int i = 0; i < M; ++i) {
             for (int j = 0; j < N; ++j) {
                 (*resultado)[i][j] = _datos[i][j] + otra[i][j];
