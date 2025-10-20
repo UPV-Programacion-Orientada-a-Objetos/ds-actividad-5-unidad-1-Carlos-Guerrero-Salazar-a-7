@@ -65,21 +65,14 @@ public:
             }
         }
     }
-
-    // Operador de asignación (Regla de los Cinco)
     MatrizDinamica<T>& operator=(const MatrizDinamica<T>& otro) {
         if (this != &otro) {
-            // Liberar memoria existente
             for (int i = 0; i < this->_filas; ++i) {
                 delete[] _datos[i];
             }
             delete[] _datos;
-            
-            // Copiar dimensiones
             this->_filas = otro._filas;
             this->_columnas = otro._columnas;
-            
-            // Asignar nueva memoria y copiar datos
             _datos = new T*[this->_filas];
             for (int i = 0; i < this->_filas; ++i) {
                 _datos[i] = new T[this->_columnas];
@@ -91,7 +84,6 @@ public:
         return *this;
     }
 
-    // Operador de suma
     MatrizDinamica<T> operator+(const MatrizDinamica<T>& otra) const {
         MatrizDinamica<T> resultado(this->_filas, this->_columnas);
         for (int i = 0; i < this->_filas; ++i) {
@@ -102,7 +94,6 @@ public:
         return resultado;
     }
 
-    // Operador de resta
     MatrizDinamica<T> operator-(const MatrizDinamica<T>& otra) const {
         MatrizDinamica<T> resultado(this->_filas, this->_columnas);
         for (int i = 0; i < this->_filas; ++i) {
@@ -113,9 +104,7 @@ public:
         return resultado;
     }
 
-    // Operador de multiplicación matricial CORREGIDO
     MatrizDinamica<T> operator*(const MatrizDinamica<T>& otra) const {
-        // Verificar que las dimensiones sean compatibles
         if (this->_columnas != otra._filas) {
             std::cout << "Error: Para multiplicar AxB, las columnas de A deben ser iguales a las filas de B." << std::endl;
             std::cout << "Dimensiones: [" << this->_filas << "x" << this->_columnas << "] * [" 
@@ -123,11 +112,10 @@ public:
             return MatrizDinamica<T>(this->_filas, otra._columnas);
         }
         
-        // El resultado tiene dimensiones: filas de A x columnas de B
         MatrizDinamica<T> resultado(this->_filas, otra._columnas);
         for (int i = 0; i < this->_filas; ++i) {
             for (int j = 0; j < otra._columnas; ++j) {
-                resultado[i][j] = T(); // Inicializar en 0
+                resultado[i][j] = T();
                 for (int k = 0; k < this->_columnas; ++k) {
                     resultado[i][j] += _datos[i][k] * otra._datos[k][j];
                 }
@@ -210,14 +198,12 @@ public:
         if (this != &otro) {
             for (int i = 0; i < M; ++i) {
                 for (int j = 0; j < N; ++j) {
-                    _datos[i][j] = otro._datos[i][j]; // COPIA, no suma
+                    _datos[i][j] = otro._datos[i][j];
                 }
             }
         }
         return *this;
     }
-
-    // Operador de suma
     MatrizEstatica<T, M, N> operator+(const MatrizEstatica<T, M, N>& otra) const {
         MatrizEstatica<T, M, N> resultado;
         for (int i = 0; i < M; ++i) {
@@ -228,7 +214,6 @@ public:
         return resultado;
     }
 
-    // Operador de resta
     MatrizEstatica<T, M, N> operator-(const MatrizEstatica<T, M, N>& otra) const {
         MatrizEstatica<T, M, N> resultado;
         for (int i = 0; i < M; ++i) {
@@ -239,15 +224,11 @@ public:
         return resultado;
     }
 
-    // Operador de multiplicación matricial CORREGIDO
-    // Solo funciona para matrices cuadradas MxM
     MatrizEstatica<T, M, N> operator*(const MatrizEstatica<T, N, N>& otra) const {
         MatrizEstatica<T, M, N> resultado;
-        
-        // Algoritmo de multiplicación matricial: C[i][j] = Σ(A[i][k] * B[k][j])
         for (int i = 0; i < M; ++i) {
             for (int j = 0; j < N; ++j) {
-                resultado[i][j] = T(); // Inicializar en 0
+                resultado[i][j] = T();
                 for (int k = 0; k < N; ++k) {
                     resultado[i][j] += _datos[i][k] * otra._datos[k][j];
                 }

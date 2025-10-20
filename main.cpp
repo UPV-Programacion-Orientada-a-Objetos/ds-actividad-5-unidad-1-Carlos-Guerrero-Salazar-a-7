@@ -8,7 +8,6 @@ int main() {
     MatrizEstatica<float, 3, 3> estaticaFloat;
     MatrizBase<int>* resultado1 = nullptr;
     MatrizBase<int>* resultado2 = nullptr;
-    
     std::cout << "Programa de Matrices Dinamicas y Estaticas" << std::endl;
     std::cout << "--------------------------------------------" << std::endl;
     std::cout << "matrices enteras:" << std::endl;
